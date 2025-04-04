@@ -1,10 +1,10 @@
+import tailwindcss from "@tailwindcss/vite"
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import svgr from "vite-plugin-svgr"
 import tsconfigPaths from "vite-tsconfig-paths"
-import tailwindcss from '@tailwindcss/vite'
 
 import Icons from "./public/icons.json"
 
@@ -36,6 +36,8 @@ export default defineConfig({
         "/* eslint-disable */",
       ],
       generatedRouteTree: "./src/route-tree.gen.ts",
+      target: "react",
+      autoCodeSplitting: true,
     }),
     tsconfigPaths(),
     VitePWA({
@@ -67,7 +69,7 @@ export default defineConfig({
 
     }),
     svgr(),
-    tailwindcss()
+    tailwindcss(),
   ],
   server: {
     proxy: {

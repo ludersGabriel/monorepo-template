@@ -24,6 +24,7 @@ export const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
+  scrollRestoration: true,
   defaultPendingComponent: () => (
     <div className="mx-auto mt-8 flex flex-col items-center justify-center">
       <Loader2Icon className="animate-spin" />

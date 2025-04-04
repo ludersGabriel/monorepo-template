@@ -25,5 +25,3 @@ dist-ssr
 dev-dist
 vite.config.d.ts
 vite.config.js
-routeTree.gen.ts
-route-tree.gen.ts
