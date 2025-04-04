@@ -1,0 +1,79 @@
+services:
+  hajime-database:
+    image: postgres:16
+    restart: always
+
+    container_name: hajime-db
+    hostname: hajime-db
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+    networks:
+      - hajime-network
+
+    volumes:
+      - hajime-data-psql:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+
+  minio-storage:
+    image: minio/minio:RELEASE.2025-02-03T21-03-04Z
+    restart: always
+
+    container_name: minio-storage
+    hostname: minio-storage
+
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+    command: server --console-address ":${MINIO_CONSOLE_PORT}" /data
+
+    healthcheck:
+      test: [CMD, mc, ready, local]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    ports:
+      - ${MINIO_PORT}:${MINIO_PORT}
+      - ${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}
+
+    networks:
+      - hajime-network
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - hajime-data-minio:/data
+
+  minio-init:
+    image: minio/minio:RELEASE.2025-02-03T21-03-04Z
+
+    container_name: minio-init
+    hostname: minio-init
+
+    entrypoint: /bin/bash -c
+    command: |
+      "
+      sleep 5;
+      mc config host add myminio http://minio-storage:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      mc mb --ignore-existing myminio/${S3_BUCKET}
+      "
+
+    depends_on:
+      - minio-storage
+
+    networks:
+      - hajime-network
+
+volumes:
+  hajime-data-psql:
+  hajime-data-minio:
+
+networks:
+  hajime-network:

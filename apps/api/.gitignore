@@ -1,0 +1,10 @@
+# deps
+node_modules/
+
+.env
+
+data/
+
+build/
+
+public/

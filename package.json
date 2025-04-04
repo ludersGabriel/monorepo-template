@@ -1,0 +1,21 @@
+{
+  "name": "corax-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "bun --filter '*' dev",
+    "build": "bun --filter '@corax-monorepo/api-client' build && bun --filter '@corax-monorepo/web' build",
+    "start": "bun --filter '@corax-monorepo/api' start",
+    "lint": "bun --filter '*' lint",
+    "lint:fix": "bun --filter '*' lint:fix",
+    "typecheck": "bun --filter '*' typecheck",
+    "generate": "bun --filter '@corax-monorepo/api' db:generate",
+    "migrate": "bun --filter '@corax-monorepo/api' db:migrate",
+    "seed": "bun --filter '@corax-monorepo/api' db:seed",
+    "studio": "bun --filter '@corax-monorepo/api' db:studio",
+    "db:reset": "bun --filter '@corax-monorepo/api' db:reset && bun -e 'setTimeout(() => {}, 3000)' && bun migrate && bun seed"
+  }
+}

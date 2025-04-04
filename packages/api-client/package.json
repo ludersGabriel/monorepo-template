@@ -1,0 +1,22 @@
+{
+  "name": "@corax-monorepo/api-client",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "bun run --watch tsc --watch",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@corax-monorepo/api": "workspace:*",
+    "@corax-monorepo/eslint-config": "workspace:*",
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "typescript": "~5.7.2"
+  }
+}

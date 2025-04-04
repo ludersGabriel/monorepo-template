@@ -1,0 +1,50 @@
+{
+  "name": "@corax-monorepo/api",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./routes": "./src/index.ts",
+    "./schemas": "./src/db/schema/zod/index.ts",
+    "./types": "./src/db/schema/types.ts"
+  },
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "cross-env DB_MIGRATING=true bun run src/db/migrate.ts",
+    "db:seed": "cross-env DB_SEEDING=true bun run src/db/seed.ts",
+    "db:studio": "drizzle-kit studio",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "route:test": "bun db:seed && bun test",
+    "lint": "bun eslint .",
+    "lint:fix": "bun eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@corax-monorepo/eslint-config": "workspace:*",
+    "@electric-sql/pglite": "^0.2.15",
+    "@hono/zod-validator": "^0.4.2",
+    "brazilian-values": "^0.13.0",
+    "csv-simple-parser": "^1.0.3",
+    "dotenv": "^16.4.7",
+    "dotenv-expand": "^12.0.1",
+    "drizzle-orm": "^0.38.4",
+    "drizzle-seed": "^0.2.1",
+    "drizzle-zod": "^0.5.1",
+    "hono": "^4.6.14",
+    "postgres": "^3.4.5",
+    "reflect-metadata": "^0.2.2",
+    "typedi": "^0.10.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "cross-env": "^7.0.3",
+    "drizzle-kit": "^0.30.1",
+    "eslint": "^9.17.0",
+    "eslint-plugin-drizzle": "^0.2.3",
+    "eslint-plugin-format": "^0.1.3",
+    "globals": "^15.14.0"
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="perfil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.86 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #currentColor;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="486.65" cy="218.73" r="218.73"/>
+  <path class="cls-1" d="M338.51,466.56h311.17c126.94,0,230,103.06,230,230v303.44H108.51v-303.44c0-126.94,103.06-230,230-230Z"/>
+</svg>

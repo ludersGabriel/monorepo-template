@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.58 1001">
+  <defs>
+    <style>
+      .b {
+        fill: #currentColor;
+      }
+    </style>
+  </defs>
+  <rect class="b" x="393.76" y="400.5" width="200" height="200" rx="100" ry="100"/>
+  <rect class="b" x="43.76" y="400.5" width="200" height="200" rx="100" ry="100"/>
+  <rect class="b" x="743.76" y="400.5" width="200" height="200" rx="100" ry="100"/>
+</svg>
