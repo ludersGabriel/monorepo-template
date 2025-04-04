@@ -13,10 +13,10 @@
   "dependencies": {
     "@corax-monorepo/api": "workspace:*",
     "@corax-monorepo/eslint-config": "workspace:*",
-    "hono": "^4.6.14"
+    "hono": "^4.7.5"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.14",
-    "typescript": "~5.7.2"
+    "@types/bun": "^1.2.8",
+    "typescript": "~5.8.2"
   }
 }
