@@ -4,6 +4,7 @@ import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import svgr from "vite-plugin-svgr"
 import tsconfigPaths from "vite-tsconfig-paths"
+import tailwindcss from '@tailwindcss/vite'
 
 import Icons from "./public/icons.json"
 
@@ -66,6 +67,7 @@ export default defineConfig({
 
     }),
     svgr(),
+    tailwindcss()
   ],
   server: {
     proxy: {

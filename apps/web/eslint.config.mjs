@@ -10,7 +10,6 @@ export default createConfig(
   ...tailwind.configs["flat/recommended"],
   {
     settings: {
-      config: "./tailwind.config.js",
       callees: ["cn", "cva"],
     },
     plugins: {
@@ -22,6 +21,7 @@ export default createConfig(
       "@tanstack/query/exhaustive-deps": "error",
       "unicorn/filename-case": ["off"],
       "react-compiler/react-compiler": "error",
+      "tailwindcss/no-custom-classname": "off",
     },
   },
   {

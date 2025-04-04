@@ -8,6 +8,7 @@ import { Loader2Icon } from "lucide-react"
 import { ErrorComponent } from "./components/CoraxError"
 import CoraxNotFound from "./components/CoraxNotFound"
 import { Toaster } from "./components/ui/sonner"
+import { ThemeProvider } from "./providers/theme-provider"
 import { routeTree } from "./route-tree.gen"
 
 const queryClient = new QueryClient({
@@ -47,10 +48,12 @@ declare module "@tanstack/react-router" {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="corax-monorepo-theme">
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }
 

@@ -51,7 +51,7 @@ export function ErrorComponent({ error }: { error: Error }) {
                       View error details
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="rounded-md bg-muted p-4">
+                      <div className="rounded-md p-4">
                         <h3 className="mb-2 font-semibold">
                           Error message:
                         </h3>
