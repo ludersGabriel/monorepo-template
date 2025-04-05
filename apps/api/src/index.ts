@@ -1,24 +1,25 @@
 import "reflect-metadata"
 import { Hono } from "hono"
 import { serveStatic } from "hono/bun"
+import { cors } from "hono/cors"
 import { HTTPException } from "hono/http-exception"
-import { jwt } from "hono/jwt"
 import { logger } from "hono/logger"
 import { prettyJSON } from "hono/pretty-json"
 import { createServer } from "node:http2"
 
-import type { AuthSchema, CoraxError, CoraxSuccess } from "./db/schema/types"
+import type { CoraxError, CoraxSuccess } from "./db/schema/types"
 
-import { authRouter } from "./components/auth/auth.route"
-import { contentRouter } from "./components/content/content.routes"
 import { HttpStatus } from "./components/error/error.service"
-import { postRouter } from "./components/post/post.route"
-import { subscriptionRouter } from "./components/subscription/subscription.route"
-import { userRouter } from "./components/user/user.routes"
 import env from "./env"
+import { auth } from "./lib/auth"
+import { BASE_PATH } from "./lib/constants"
 
-const basePath = "/api/v1"
-const app = new Hono()
+const app = new Hono<{
+  Variables: {
+    user: typeof auth.$Infer.Session.user | null
+    session: typeof auth.$Infer.Session.session | null
+  }
+}>()
 
 app.use("*", logger())
   .use("*", prettyJSON())
@@ -56,40 +57,50 @@ app.onError((err, c) => {
   )
 })
 
+if (env.NODE_ENV !== "production") {
+  app.use(
+    "*",
+    cors({
+      origin: "https://local.drizzle.studio",
+      allowHeaders: ["Content-Type", "Authorization"],
+      allowMethods: ["POST", "GET", "OPTIONS"],
+      exposeHeaders: ["Content-Length"],
+      maxAge: 600,
+      credentials: true,
+    }),
+  )
+}
+
+app.on(["POST", "GET"], `${BASE_PATH}/auth/**`, c => auth.handler(c.req.raw))
+
 // eslint-disable-next-line unused-imports/no-unused-vars
-const apiRoutes = app.basePath(basePath)
-  .use("*", (c, next) => {
-    if (c.req.path.startsWith(`${basePath}/auth`)) {
+const apiRoutes = app.basePath(BASE_PATH)
+  .use("*", async (c, next) => {
+    const session = await auth.api.getSession({ headers: c.req.raw.headers })
+
+    if (c.req.path.startsWith(`${BASE_PATH}/auth`)) {
       return next()
     }
 
-    const token = c.req.header("Authorization")
-
-    if (!token) {
-      const queryToken = c.req.query("token")
-
-      if (queryToken) {
-        c.req.raw.headers.set("Authorization", `Bearer ${queryToken}`)
-      }
+    if (!session) {
+      return c.json<CoraxError>({
+        success: false,
+        error: "Unauthorized",
+      }, HttpStatus.UNAUTHORIZED)
     }
 
-    return jwt({
-      secret: env.APP_SECRET,
-    })(c, next)
+    c.set("user", session.user)
+    c.set("session", session.session)
+    return next()
   })
   .get("/", c =>
     c.json<CoraxSuccess<{ hello: string }>>({
       data: {
-        hello: `core api running on ${basePath}`,
+        hello: `core api running on ${BASE_PATH}`,
       },
       message: "Welcome to Core API",
       success: true,
     }))
-  .route("/auth", authRouter)
-  .route("/user", userRouter)
-  .route("/subscription", subscriptionRouter)
-  .route("/post", postRouter)
-  .route("/content", contentRouter)
 
 app.get("*", serveStatic({
   root: "./public",
@@ -98,14 +109,6 @@ app.get("*", serveStatic({
 }))
 
 export type AppType = typeof apiRoutes
-
-export function honoWithJwt() {
-  return new Hono<{
-    Variables: {
-      jwtPayload: AuthSchema
-    }
-  }>()
-}
 
 export default {
   createServer,

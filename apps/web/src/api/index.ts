@@ -1,10 +1,8 @@
 import apiClient from "@corax-monorepo/api-client"
 
-import { getLocalToken } from "./auth/auth.mutation"
-
 const client = apiClient("", {
-  fetch: (input: RequestInfo | URL, init?: RequestInit) => {
-    const token = getLocalToken()
+  fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+    // const token = getLocalToken()
     const headers = new Headers(init?.headers)
 
     if (
@@ -13,10 +11,6 @@ const client = apiClient("", {
       && !headers.has("Content-Type")
     ) {
       headers.set("Content-Type", "application/json")
-    }
-
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`)
     }
 
     return fetch(input, {

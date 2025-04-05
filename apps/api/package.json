@@ -25,6 +25,7 @@
     "@corax-monorepo/eslint-config": "workspace:*",
     "@electric-sql/pglite": "^0.2.17",
     "@hono/zod-validator": "^0.4.3",
+    "better-auth": "^1.2.5",
     "brazilian-values": "^0.13.0",
     "csv-simple-parser": "^2.0.2",
     "dotenv": "^16.4.7",

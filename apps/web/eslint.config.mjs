@@ -1,13 +1,13 @@
 import createConfig from "@corax-monorepo/eslint-config/create-config"
 import pluginQuery from "@tanstack/eslint-plugin-query"
 import reactCompiler from "eslint-plugin-react-compiler"
-import tailwind from "eslint-plugin-tailwindcss"
+// import tailwind from "eslint-plugin-tailwindcss"
 
 export default createConfig(
   {
     react: true,
   },
-  ...tailwind.configs["flat/recommended"],
+  // ...tailwind.configs["flat/recommended"],
   {
     settings: {
       callees: ["cn", "cva"],
