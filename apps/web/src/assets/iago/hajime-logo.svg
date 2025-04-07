@@ -3,11 +3,11 @@
   <defs>
     <style>
       .e {
-        fill: #1f1e1e;
+        fill: #currentColor;
       }
 
       .f {
-        fill: #ec2f39;
+        fill: #currentColor;
       }
     </style>
   </defs>

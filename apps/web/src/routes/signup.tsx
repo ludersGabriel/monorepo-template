@@ -1,10 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 
 import { authClient } from "../api/auth-client"
-import { LoginForm } from "../components/auth/login-form"
+import { RegisterForm } from "../components/auth/register-form"
 
-export const Route = createFileRoute("/")({
-  component: Home,
+export const Route = createFileRoute("/signup")({
+  component: SignupComponent,
   beforeLoad: async () => {
     const { data, error } = await authClient.getSession()
 
@@ -16,10 +16,10 @@ export const Route = createFileRoute("/")({
   },
 })
 
-function Home() {
+function SignupComponent() {
   return (
     <div className="flex size-full flex-col items-center justify-center">
-      <LoginForm />
+      <RegisterForm />
     </div>
   )
 }
