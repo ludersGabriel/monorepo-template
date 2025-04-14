@@ -16,6 +16,7 @@ const client = apiClient("", {
     return fetch(input, {
       ...init,
       headers,
+      credentials: "include",
     })
   },
 })

@@ -25,6 +25,8 @@ app.use("*", logger())
   .use("*", prettyJSON())
 
 app.onError((err, c) => {
+  console.error(`--> ERROR ${c.req.path}`, err)
+
   if (err instanceof HTTPException) {
     const errResponse
       = err.res
@@ -71,7 +73,7 @@ if (env.NODE_ENV !== "production") {
   )
 }
 
-app.on(["POST", "GET"], `${BASE_PATH}/auth/**`, c => auth.handler(c.req.raw))
+app.on(["POST", "GET"], `${BASE_PATH}/auth/*`, c => auth.handler(c.req.raw))
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 const apiRoutes = app.basePath(BASE_PATH)
@@ -116,4 +118,5 @@ export default {
   // https://hono.dev/docs/middleware/builtin/body-limit
   // 2GiB
   maxRequestBodySize: 1024 * 1024 * 1024 * 2,
+  port: env.PORT,
 }

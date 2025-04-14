@@ -6,9 +6,9 @@ import { RegisterForm } from "../components/auth/register-form"
 export const Route = createFileRoute("/signup")({
   component: SignupComponent,
   beforeLoad: async () => {
-    const { data, error } = await authClient.getSession()
+    const { data } = await authClient.getSession()
 
-    if (data?.user || data?.session || error) {
+    if (data?.user || data?.session) {
       throw redirect({
         to: "/dashboard",
       })

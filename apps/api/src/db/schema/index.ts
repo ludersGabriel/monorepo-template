@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm"
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
 const timestamps = {
@@ -11,7 +10,7 @@ const timestamps = {
     withTimezone: true,
   })
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`)
+    .$onUpdate(() => new Date())
     .notNull(),
 }
 
@@ -31,12 +30,12 @@ export const session = pgTable("session", {
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  activeOrganizationId: text("active_organization_id"),
   ...timestamps,
 })
 
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
-  password: text("password"),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
@@ -46,6 +45,7 @@ export const account = pgTable("account", {
   accessTokenExpiresAt: timestamp("access_token_expires_at"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   scope: text("scope"),
+  password: text("password"),
   ...timestamps,
 })
 
@@ -54,6 +54,34 @@ export const verification = pgTable("verification", {
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
+  ...timestamps,
+})
+
+export const organization = pgTable("organization", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").unique(),
+  logo: text("logo"),
+  metadata: text("metadata"),
+  ...timestamps,
+})
+
+export const member = pgTable("member", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id").notNull().references(() => organization.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  role: text("role").notNull(),
+  ...timestamps,
+})
+
+export const invitation = pgTable("invitation", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id").notNull().references(() => organization.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
+  role: text("role"),
+  status: text("status").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  inviterId: text("inviter_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   ...timestamps,
 })
 

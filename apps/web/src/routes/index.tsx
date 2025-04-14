@@ -6,9 +6,9 @@ import { LoginForm } from "../components/auth/login-form"
 export const Route = createFileRoute("/")({
   component: Home,
   beforeLoad: async () => {
-    const { data, error } = await authClient.getSession()
+    const { data } = await authClient.getSession()
 
-    if (data?.user || data?.session || error) {
+    if (data?.user || data?.session) {
       throw redirect({
         to: "/dashboard",
       })

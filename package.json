@@ -6,7 +6,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "bun --filter '*' dev",
+    "dev": "bun --filter '*' --elide-lines 0 dev",
+    "dev:frontend": "bun --filter '!@corax-monorepo/api' dev",
+    "dev:backend": "bun --filter '@corax-monorepo/api' --elide-lines 0 dev",
     "build": "bun --filter '@corax-monorepo/api-client' build && bun --filter '@corax-monorepo/web' build",
     "start": "bun --filter '@corax-monorepo/api' start",
     "lint": "bun --filter '*' lint",

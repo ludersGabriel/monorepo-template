@@ -22,7 +22,12 @@ export function RegisterForm({
       password: "",
     },
     onSubmit: async ({ value }) => {
-      await authClient.signUp.email(value)
+      const resp = await authClient.signUp.email(value)
+
+      if (resp.error) {
+        toast.error("Erro ao criar usuário")
+        return
+      }
 
       await router.invalidate()
       await navigate({ to: "/dashboard" })

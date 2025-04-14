@@ -4,6 +4,8 @@ import postgres from "postgres"
 import * as schema from "@/api/db/schema"
 import env from "@/api/env"
 
+export { schema as drizzleSchema }
+
 // PostgreSQL connection
 export const connection = postgres(env.DATABASE_URL, {
   max: env.DB_MIGRATING || env.DB_SEEDING ? 1 : undefined,

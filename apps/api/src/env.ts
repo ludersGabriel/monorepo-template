@@ -21,6 +21,7 @@ const EnvSchema = z.object({
   S3_ACCESSKEY_USER: z.string(),
   S3_ACCESSKEY_PASS: z.string(),
   S3_BUCKET: z.string(),
+  PORT: z.coerce.number().default(3000),
 })
 
 // eslint-disable-next-line ts/no-redeclare
