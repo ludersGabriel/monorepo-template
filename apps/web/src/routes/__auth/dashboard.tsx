@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { toast } from "sonner"
 
@@ -11,12 +12,20 @@ export const Route = createFileRoute("/__auth/dashboard")({
 
 function LogoutButton() {
   const router = useRouter()
+  const qc = useQueryClient()
 
   return (
     <Button onClick={async () => {
-      await authClient.signOut()
-      await router.navigate({ to: "/" })
+      const { error } = await authClient.signOut()
+
+      if (error) {
+        toast.error("Falha ao fazer logout")
+        return
+      }
+
+      await qc.invalidateQueries({ queryKey: ["session"], type: "all" })
       await router.invalidate()
+      await router.navigate({ to: "/" })
       toast.success("Logout realizado com sucesso!")
     }}
     >

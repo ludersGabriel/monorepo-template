@@ -1,19 +1,18 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 
-import { authClient } from "../api/auth-client"
 import { RegisterForm } from "../components/auth/register-form"
 
 export const Route = createFileRoute("/signup")({
-  component: SignupComponent,
-  beforeLoad: async () => {
-    const { data } = await authClient.getSession()
+  beforeLoad: async ({ context }) => {
+    const { session, user } = context
 
-    if (data?.user || data?.session) {
+    if (session || user) {
       throw redirect({
         to: "/dashboard",
       })
     }
   },
+  component: SignupComponent,
 })
 
 function SignupComponent() {

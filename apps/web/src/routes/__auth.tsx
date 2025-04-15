@@ -1,28 +1,21 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
-import { toast } from "sonner"
-
-import { authClient } from "../api/auth-client"
 
 export const Route = createFileRoute("/__auth")({
-  component: RouteComponent,
-  beforeLoad: async () => {
-    const resp = await authClient.getSession()
+  beforeLoad: async ({ context }) => {
+    const { session, user } = context
 
-    if (resp.error || !resp.data) {
-      toast.error("Não autorizado!", {
-        description: "Você precisa fazer login para acessar essa página.",
-      })
-
+    if (!session || !user) {
       throw redirect({
         to: "/",
       })
     }
 
     return {
-      session: resp.data.session,
-      user: resp.data.user,
+      session,
+      user,
     }
   },
+  component: RouteComponent,
 })
 
 function RouteComponent() {

@@ -1,8 +1,10 @@
 import HajimeLogo from "@/web/assets/iago/hajime-logo.svg?react"
+import { useQueryClient } from "@tanstack/react-query"
 import { Link, useNavigate, useRouter } from "@tanstack/react-router"
 import { toast } from "sonner"
 
 import { authClient } from "@/web/api/auth-client"
+import { API } from "@/web/api/routes"
 import { Button } from "@/web/components/ui/button"
 import { Card, CardContent } from "@/web/components/ui/card"
 import { cn } from "@/web/lib/utils"
@@ -15,6 +17,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate()
   const router = useRouter()
+  const qc = useQueryClient()
 
   const form = useCoraxForm({
     defaultValues: {
@@ -22,8 +25,14 @@ export function LoginForm({
       password: "",
     },
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(value)
+      const { error } = await authClient.signIn.email(value)
 
+      if (error) {
+        toast.error("Falha ao fazer login")
+        return
+      }
+
+      await qc.invalidateQueries({ queryKey: API.session.options.sessionQueryOptions.queryKey, type: "all" })
       await router.invalidate()
       await navigate({ to: "/dashboard" })
       toast.success("Login realizado com sucesso!")

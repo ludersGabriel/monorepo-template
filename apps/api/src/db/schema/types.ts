@@ -1,5 +1,9 @@
 /* eslint-disable ts/no-empty-object-type */
 
+import type { z } from "zod"
+
+import type { userSchemas } from "./zod/user.zod"
+
 export type CoraxSuccess<T = void> = {
   success: true
   message: string
@@ -10,3 +14,8 @@ export type CoraxError = {
   error: string
   isFormError?: boolean
 }
+
+export type UserModel = z.infer<typeof userSchemas.model>
+export type UserDto = z.infer<typeof userSchemas.dto>
+export type UserInput = z.infer<typeof userSchemas.input>
+export type UserUpdate = z.infer<typeof userSchemas.update>
